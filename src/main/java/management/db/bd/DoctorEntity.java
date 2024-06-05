@@ -1,4 +1,4 @@
-package management.entity;
+package management.db.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "doctor")
 public class DoctorEntity {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
     private String name;
@@ -44,6 +45,8 @@ public class DoctorEntity {
 
     @Column(name = "is_child",columnDefinition = "boolean default false")
     private boolean isChild;
+    @Column(name= "is_home", columnDefinition = "boolean default false")
+    private boolean isHome;
 
     @OneToMany//(mappedBy = "doctorId")
     private List<DoctorSpecializationEntity> doctorSpecializationList = new ArrayList<>();

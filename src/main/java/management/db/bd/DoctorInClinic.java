@@ -1,6 +1,5 @@
-package management.entity;
+package management.db.bd;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,11 +18,12 @@ import java.util.List;
 public class DoctorInClinic {
     @Id
     @ManyToOne(targetEntity = DoctorEntity.class, fetch = FetchType.LAZY)
-
-    @Column(name = "doctor_id")
+    @JoinColumn(name = "doctor_id")
     private long doctorId;
+
     @Id
     @ManyToOne(targetEntity = ClinicEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id")
     private long clinicId;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ default CURRENT_TIMESTAMP",

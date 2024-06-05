@@ -1,4 +1,4 @@
-package management.entity;
+package management.db.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "content")
 public class Content {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
 //    @Column(nullable = false)

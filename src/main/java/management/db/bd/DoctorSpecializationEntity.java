@@ -1,4 +1,4 @@
-package management.entity;
+package management.db.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +20,7 @@ public class DoctorSpecializationEntity {
     @Id
     @ManyToOne(targetEntity = DoctorEntity.class, fetch = FetchType.LAZY)
     private long doctorId;
+
     @Column(columnDefinition = "boolean default true",insertable = false)
     private boolean isActive;
 }

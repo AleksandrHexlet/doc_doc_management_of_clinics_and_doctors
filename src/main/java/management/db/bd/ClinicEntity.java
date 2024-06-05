@@ -1,4 +1,4 @@
-package management.entity;
+package management.db.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,21 +14,25 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@IdClass(DoctorInClinicPK.class)
+//@IdClass(DoctorInClinicPK.class)
 @Table(name = "clinic")
 public class ClinicEntity {
     @Id
-    private long id;
-    @Column(nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "clinic_id",nullable = false)
+    private long clinicId;
+    @Column(name = "name",nullable = false)
     private String name;
-    @Column(nullable = false, length = 9000)
+
+    @Column(name = "address",nullable = false, length = 9000)
     private String address;
-    @Column(nullable = false)
+
+    @Column(name = "city_id", nullable = false)
     private int cityId;
-    @Column(nullable = false)
+    @Column(name = "phone_number",nullable = false)
     private int phoneNumber;
 
-    @Column(nullable = false, length = 15000)
+    @Column(name = "description",nullable = false, length = 15000)
     private String description;
 
     @OneToMany

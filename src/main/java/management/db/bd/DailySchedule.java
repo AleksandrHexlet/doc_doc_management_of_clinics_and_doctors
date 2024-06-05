@@ -1,9 +1,6 @@
-package management.entity;
+package management.db.bd;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,16 +18,29 @@ import java.time.LocalTime;
 @Table(name = "daily_schedule")
 public class DailySchedule {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name ="date")
     private LocalDateTime date;
+
+    @Column(name ="time_to")
     private LocalTime timeTo;
+    @Column(name ="time_from")
     private LocalTime timeFrom;
 
+    @Column(name ="time_is_free")
+    private boolean timeIsFree;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name ="type_day")
     private TypeDay typeDay;
 
     @ManyToOne(targetEntity = DoctorEntity.class)
+    @JoinColumn(name ="doctor_id")
     private long doctorId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_schedule")
     private TypeSchedule typeSchedule;
 
     public enum TypeDay {
@@ -42,8 +52,8 @@ public class DailySchedule {
     }
 
     public enum TypeSchedule {
-        FREE,
-        BUSY
+        DAY,
+        ONE_DOCTOR_APPOINTMENT
     }
 
 }

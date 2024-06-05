@@ -1,7 +1,6 @@
 package management.repository;
 
-import management.entity.ClinicEntity;
-import management.entity.DoctorEntity;
+import management.db.bd.ClinicEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
