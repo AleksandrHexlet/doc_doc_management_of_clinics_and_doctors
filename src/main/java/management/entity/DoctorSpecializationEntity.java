@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @IdClass(DoctorSpecializationPK.class)
+@Table(name = "doctor_specialization")
+@Entity
 public class DoctorSpecializationEntity {
     @Id
     private long specializationId;

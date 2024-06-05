@@ -17,7 +17,6 @@ import java.util.List;
 @IdClass(DoctorInClinicPK.class)
 @Table(name = "clinic")
 public class ClinicEntity {
-
     @Id
     private long id;
     @Column(nullable = false)
@@ -28,16 +27,19 @@ public class ClinicEntity {
     private int cityId;
     @Column(nullable = false)
     private int phoneNumber;
+
     @Column(nullable = false, length = 15000)
     private String description;
 
     @OneToMany
     private List<DoctorInClinic> doctorsInClinic = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "clinicId")
     private List<Content> contents = new ArrayList<>();
 
-    @OneToMany
-    private List<CharacteristicInClinic> characteristicInClinic;
-
+    @JoinTable(name = "characteristic_in_clinic",
+            joinColumns = @JoinColumn(name = "clinic_id"),
+            inverseJoinColumns = @JoinColumn(name = "characteristic_id"))
+    @ManyToMany
+    private List<Characteristic> characteristicInClinicList = new ArrayList<>();
 }

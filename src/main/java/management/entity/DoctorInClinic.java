@@ -1,5 +1,6 @@
 package management.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,18 +21,28 @@ import java.util.List;
 public class DoctorInClinic {
     @Id
     @ManyToOne(targetEntity = DoctorEntity.class, fetch = FetchType.LAZY)
+
+    @Column(name = "doctor_id")
     private long doctorId;
     @Id
     @ManyToOne(targetEntity = ClinicEntity.class, fetch = FetchType.LAZY)
     private long clinicId;
+
     @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ default CURRENT_TIMESTAMP",
             insertable = false, updatable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "updated_at", columnDefinition = "TIMESTAMPTZ default CURRENT_TIMESTAMP",
             insertable = false)
     private LocalDateTime updatedAt;
+
     private int price;
+
     @Column(name = "is_active",columnDefinition = "boolean default true", insertable = false)
     private boolean isActive;
+
+
+    @OneToOne(mappedBy = "doctorId")
+    private Content content;
 
 }

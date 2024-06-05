@@ -33,15 +33,17 @@ public class DoctorEntity {
     @Column(length = 10000, nullable = false)
     private String description;
 
-
     @Column(nullable = false)
     private String login;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "boolean default true", insertable = false)
+    @Column(name= "is_active", columnDefinition = "boolean default true", insertable = false)
     private boolean isActive;
+
+    @Column(name = "is_child",columnDefinition = "boolean default false")
+    private boolean isChild;
 
     @OneToMany//(mappedBy = "doctorId")
     private List<DoctorSpecializationEntity> doctorSpecializationList = new ArrayList<>();
@@ -49,8 +51,12 @@ public class DoctorEntity {
     @OneToMany
     private List<DoctorInClinic> doctorInClinicList = new ArrayList<>();
 
-    @OneToOne
-    private Content content;
+    @OneToOne(mappedBy = "doctorId")
+    private Content content; // у доктора не будет столбца content, но в content будет столбец doctorId
+
+//    @OneToMany
+//    private DailySchedule dailySchedule; // у доктора будет столбц dailySchedule с id лобьекта,
+    // но в DailySchedule не будет столбца doctorId так как мы его можем не создавать
 }
 
 
