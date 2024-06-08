@@ -39,6 +39,11 @@ public class DailySchedule {
     @JoinColumn(name ="doctor_id")
     private long doctorId;
 
+    @ManyToOne(targetEntity = ClinicEntity.class)
+    @JoinColumn(name = "clinic_id")
+    private long clinicId;
+
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type_schedule")
     private TypeSchedule typeSchedule;

@@ -21,8 +21,15 @@ public class DoctorEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false)
-    private String name;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "patronymic", nullable = false)
+    private String patronymic;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
     @Column(columnDefinition = "text[]", nullable = false)
     @JdbcTypeCode(SqlTypes.ARRAY)

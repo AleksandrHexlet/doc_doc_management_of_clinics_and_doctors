@@ -1,9 +1,14 @@
 package management.controller;
 
+import management.db.bd.ClinicEntity;
+import management.db.dto.ClinicByDoctorIdWithSchedule;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/clinic")
@@ -38,6 +43,15 @@ public class ClinicController {
         return clinicService.getClinic("qwerty");
 
     }
+
+    @GetMapping("/doctor/{id}")
+    public List<ClinicByDoctorIdWithSchedule> getClinicsWithScheduleByDoctorId(
+            @PathVariable(name = "id") long doctorId, LocalDateTime dateTime){
+       return clinicService.getClinicsWithScheduleByDoctorId(doctorId,dateTime);
+    }
+
+
+
 
 
 

@@ -17,7 +17,6 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity,Integer> {
 
     List<DoctorEntity> findByDoctorInClinicListClinicId(long clinicId);
 
-
     @Query(nativeQuery = true,value = "SELECT * FROM doctor JOIN doctor_specialization " +
             "ON doctor_specialization.doctor_id = doctor.id " +
             "JOIN doctor_in_clinic ON doctor_in_clinic.doctor.id = doctor.id " +
@@ -51,6 +50,8 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity,Integer> {
 
 //  все могут быть вместе и каждый может быть передан по отдельности и в
 //  любых сочетаниях друг с другом или не передаваться вообще
+
+//List<DoctorEntity> findByDoctorInClinicListClinicId(long clinicId);
 
 //    @Query(nativeQuery = true,value = "SELECT * from doctor JOIN doctor_in_clinic " +
 //            "ON doctor_in_clinic.doctor_id = doctor.id " +

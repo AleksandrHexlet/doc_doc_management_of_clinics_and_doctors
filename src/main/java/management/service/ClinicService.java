@@ -1,13 +1,17 @@
 package management.service;
 
+import management.db.bd.ClinicEntity;
 import management.db.bd.DailySchedule;
 import management.db.bd.DoctorEntity;
+import management.db.dto.ClinicByDoctorIdWithSchedule;
 import management.db.dto.DoctorScheduleResponse;
+import management.repository.ClinicRepository;
 import management.repository.DailyScheduleRepository;
 import management.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,10 +20,33 @@ import java.util.stream.Collectors;
 public class ClinicService {
 
 
+    private final ClinicRepository clinicRepository;
+
+    public ClinicService(ClinicRepository clinicRepository) {
+        this.clinicRepository = clinicRepository;
+    }
+
     public String getClinic(String name) {
         return "Clinic";
     }
 
 
+    public List<ClinicByDoctorIdWithSchedule> getClinicsWithScheduleByDoctorId(long doctorId,
+                                                                               LocalDateTime dateTimeFrom) {
 
+        LocalDateTime dateTimeTo = dateTimeFrom.plusDays(2);
+        List<ClinicEntity> clinicList = clinicRepository.getClinicsByDoctorId(doctorId);
+        List<Long> clinicIdList = clinicList.stream().map(clinic -> clinic.getClinicId()).toList();
+        List<DailySchedule> dailyScheduleList = clinicRepository
+                .getScheduleByClinicIdAndDoctorId(clinicIdList,doctorId,dateTimeFrom, dateTimeTo);
+
+        Map<Long,Map<LocalDate,List<DailySchedule>>> dailyScheduleMap = dailyScheduleList.stream().collect(Collectors.groupingBy(
+            dailySchedule -> dailySchedule.getClinicId(),
+                Collectors.groupingBy(dailySchedule -> dailySchedule.getDate().toLocalDate())
+        ));
+
+     return clinicList.stream().map(clinicEntity -> new ClinicByDoctorIdWithSchedule(
+             clinicEntity, dailyScheduleMap.get(clinicEntity.getClinicId())
+     )).toList();
+    }
 }

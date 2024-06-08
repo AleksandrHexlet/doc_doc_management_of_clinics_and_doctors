@@ -48,5 +48,24 @@ public class DoctorService {
         ).toList();
 
         return doctorScheduleResponseList;
+//        return null;
+    }
+
+    public Integer deleteDoctor(Integer doctorId) {
+        if(doctorRepository.doctorDelete(doctorId).isEmpty()){
+            return null;
+        }
+        return doctorRepository.doctorDelete(doctorId).get();
+    }
+
+    public DoctorEntity addDoctor(DoctorEntity doctor) {
+        String password = String.valueOf ((Math.random() * (10000 - 100)) + 100);
+        doctor.setLogin(doctor.getLastName());
+        doctor.setPassword(password);
+       return doctorRepository.save(doctor);
+    }
+
+    public List<DoctorEntity> getDoctorsByClinicId(Long id) {
+        return doctorRepository.findByDoctorInClinicListClinicId(id);
     }
 }

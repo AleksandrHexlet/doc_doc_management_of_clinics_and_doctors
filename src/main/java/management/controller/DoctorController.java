@@ -1,13 +1,11 @@
 package management.controller;
 
+import management.db.bd.DoctorEntity;
 import management.db.dto.DoctorScheduleResponse;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,4 +32,24 @@ public class DoctorController {
 
         return doctorService.getDoctorAndSchedule(doctorSpecialization, isChild, cityId, isHome, dateAdmission);
     }
+    @DeleteMapping
+    public Integer deleteDoctor(@RequestParam Integer doctorId) {
+        return doctorService.deleteDoctor(doctorId);
+    }
+
+    @PostMapping
+    public DoctorEntity createDoctor(@RequestParam DoctorEntity doctor){
+        return doctorService.addDoctor(doctor);
+    }
+
+    @GetMapping("/clinic/{id}")
+    public List<DoctorEntity> getDoctorsByClinicId(@PathVariable Long id){
+        return doctorService.getDoctorsByClinicId(id);
+    }
+
+
+
+
+
+
 }
