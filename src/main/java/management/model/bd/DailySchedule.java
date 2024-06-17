@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.time.LocalTime;
 public class DailySchedule {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(name ="date")
     private LocalDateTime date;
 
@@ -34,6 +34,8 @@ public class DailySchedule {
     @Enumerated(EnumType.STRING)
     @Column(name ="type_day")
     private TypeDay typeDay;
+
+
 
     @ManyToOne(targetEntity = DoctorEntity.class)
     @JoinColumn(name ="doctor_id")

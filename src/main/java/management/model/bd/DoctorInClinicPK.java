@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -15,5 +15,4 @@ import java.io.Serializable;
 public class DoctorInClinicPK implements Serializable {
     private long doctorId;
     private long clinicId;
-
 }

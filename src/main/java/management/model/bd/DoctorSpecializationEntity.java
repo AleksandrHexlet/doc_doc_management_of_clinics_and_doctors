@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

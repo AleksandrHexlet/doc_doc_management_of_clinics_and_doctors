@@ -1,6 +1,6 @@
 package management.repository;
 
-import management.db.bd.DailySchedule;
+import management.model.bd.DailySchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-public interface DailyScheduleRepository extends JpaRepository<Long, DailySchedule> {
+public interface DailyScheduleRepository extends JpaRepository<DailySchedule,Long> {
 
 
     @Query(nativeQuery = true,value = "SELECT * FROM daily_schedule " +

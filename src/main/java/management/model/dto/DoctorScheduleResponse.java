@@ -1,8 +1,8 @@
-package management.db.dto;
+package management.model.dto;
 
 
-import management.db.bd.DailySchedule;
-import management.db.bd.DoctorEntity;
+import management.model.bd.DailySchedule;
+import management.model.bd.DoctorEntity;
 
 import java.util.List;
 

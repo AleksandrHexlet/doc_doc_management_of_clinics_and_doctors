@@ -1,7 +1,7 @@
 package management.controller;
 
-import management.db.bd.DoctorEntity;
-import management.db.dto.DoctorScheduleResponse;
+import management.model.bd.DoctorEntity;
+import management.model.dto.DoctorScheduleResponse;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,24 +32,46 @@ public class DoctorController {
 
         return doctorService.getDoctorAndSchedule(doctorSpecialization, isChild, cityId, isHome, dateAdmission);
     }
+
     @DeleteMapping
-    public Integer deleteDoctor(@RequestParam Integer doctorId) {
+    public long deleteDoctor(@RequestParam Long doctorId) {
         return doctorService.deleteDoctor(doctorId);
     }
 
     @PostMapping
-    public DoctorEntity createDoctor(@RequestParam DoctorEntity doctor){
+    public DoctorEntity createDoctor(@RequestParam DoctorEntity doctor) {
         return doctorService.addDoctor(doctor);
     }
 
     @GetMapping("/clinic/{id}")
-    public List<DoctorEntity> getDoctorsByClinicId(@PathVariable Long id){
+    public List<DoctorEntity> getDoctorsByClinicId(@PathVariable Long id) {
         return doctorService.getDoctorsByClinicId(id);
     }
 
+    @GetMapping("/is_time_free")
+    public boolean isFreeTimeDoctor(@RequestParam LocalDateTime date,
+                                    @RequestParam long doctorId, @RequestParam long clinicId) {
+        return doctorService.isDoctorTimeFree(date, doctorId, clinicId);
+    }
 
+    @PutMapping("/reserve_time")
+    public boolean reserveTime(@RequestParam LocalDateTime date,
+                               @RequestParam long doctorId, @RequestParam long clinicId) {
+        return doctorService.reserveTime(date, doctorId, clinicId);
+    }
 
-
-
+    @PutMapping("/cancel_reserve")
+    public boolean cancelReserve(@RequestParam LocalDateTime date,
+                               @RequestParam long doctorId, @RequestParam long clinicId) {
+        return doctorService.cancelReserve(date, doctorId, clinicId);
+    }
+    @GetMapping("/authorize")
+    public DoctorEntity getDoctorByLoginAndPassword(@RequestParam String login, @RequestParam String password) {
+       return doctorService.getDoctorByLoginAndPassword(login,password);
+    }
+    @GetMapping("/{id}")
+    public DoctorEntity getDoctorById(@PathVariable long id) {
+        return doctorService.getDoctorById(id);
+    }
 
 }

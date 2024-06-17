@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -27,8 +27,5 @@ public class Characteristic {
 
     @OneToOne(mappedBy = "characteristicId")
     Content content;
-
-    @OneToOne
-    ClinicEntity clinic;
 
 }

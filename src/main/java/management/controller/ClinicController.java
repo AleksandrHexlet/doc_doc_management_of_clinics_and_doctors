@@ -1,7 +1,7 @@
 package management.controller;
 
-import management.db.bd.ClinicEntity;
-import management.db.dto.ClinicByDoctorIdWithSchedule;
+import management.model.bd.ClinicEntity;
+import management.model.dto.ClinicByDoctorIdWithSchedule;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,11 @@ public class ClinicController {
        return clinicService.getClinicsWithScheduleByDoctorId(doctorId,dateTime);
     }
 
+@GetMapping("/{id}")
+    public ClinicEntity getClinicById(@PathVariable(name = "id") long clinicId) {
+       return clinicService.getClinicById(clinicId);
 
+}
 
 
 

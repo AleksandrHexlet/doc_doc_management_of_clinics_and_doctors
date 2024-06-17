@@ -1,11 +1,9 @@
-package management.db.bd;
-
+package management.model.bd;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +12,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-//@IdClass(DoctorInClinicPK.class)
 @Table(name = "clinic")
 public class ClinicEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "clinic_id",nullable = false)
     private long clinicId;
+
     @Column(name = "name",nullable = false)
     private String name;
 
@@ -35,7 +33,7 @@ public class ClinicEntity {
     @Column(name = "description",nullable = false, length = 15000)
     private String description;
 
-    @OneToMany
+    @OneToMany(mappedBy = "doctorId",targetEntity = DoctorEntity.class)
     private List<DoctorInClinic> doctorsInClinic = new ArrayList<>();
 
     @OneToMany(mappedBy = "clinicId")

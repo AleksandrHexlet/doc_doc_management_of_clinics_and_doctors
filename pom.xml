@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.docdoc</groupId>
-	<artifactId>management_of_clinics_and_doctors</artifactId>
+	<artifactId>doc_doc_management_of_clinics_and_doctors</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>management_of_clinics_and_doctors</name>
 	<description>management_of_clinics_and_doctors</description>

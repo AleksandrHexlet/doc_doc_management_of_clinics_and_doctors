@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DoctorSpecializationPK implements Serializable {
-    private int specializationId;
-    private int doctorId;
+    private long specializationId;
+    private long doctorId;
 }

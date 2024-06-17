@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,8 @@ import java.util.List;
 public class DoctorEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "doctor_id")
+    private long doctorId;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -55,19 +56,25 @@ public class DoctorEntity {
     @Column(name= "is_home", columnDefinition = "boolean default false")
     private boolean isHome;
 
-    @OneToMany//(mappedBy = "doctorId")
+    @OneToMany(mappedBy = "doctorId")
     private List<DoctorSpecializationEntity> doctorSpecializationList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "clinicId", targetEntity = ClinicEntity.class)
     private List<DoctorInClinic> doctorInClinicList = new ArrayList<>();
 
     @OneToOne(mappedBy = "doctorId")
-    private Content content; // у доктора не будет столбца content, но в content будет столбец doctorId
+    private Content content; //у доктора не будет столбца content, но в content будет столбец doctorId
+
+    @OneToMany(mappedBy = "doctorId")
+    private List<DailySchedule> dailyScheduleList = new ArrayList<>();
+
+}
+
+
 
 //    @OneToMany
 //    private DailySchedule dailySchedule; // у доктора будет столбц dailySchedule с id лобьекта,
-    // но в DailySchedule не будет столбца doctorId так как мы его можем не создавать
-}
+// но в DailySchedule не будет столбца doctorId так как мы его можем не создавать
 
 
 //@Column(columnDefinition = "JSONB")

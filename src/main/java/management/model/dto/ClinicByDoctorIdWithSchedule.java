@@ -1,10 +1,10 @@
-package management.db.dto;
+package management.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import management.db.bd.ClinicEntity;
-import management.db.bd.DailySchedule;
+import management.model.bd.ClinicEntity;
+import management.model.bd.DailySchedule;
 
 import java.time.LocalDate;
 import java.util.List;

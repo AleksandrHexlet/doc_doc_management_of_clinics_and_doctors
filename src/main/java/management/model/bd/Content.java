@@ -1,4 +1,4 @@
-package management.db.bd;
+package management.model.bd;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,21 @@ public class Content {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne(targetEntity = DoctorEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private long doctorId;
+
+    @ManyToOne(targetEntity = ClinicEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id")
+    private long clinicId;
+
+    @OneToOne(targetEntity = Characteristic.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "characteristic_id" )
+    private long characteristicId;
+
+}
+
+
 //    @Column(nullable = false)
 //    private String path;
 //
@@ -28,14 +43,3 @@ public class Content {
 //
 //    @OneToOne
 //    private DoctorEntity doctor;
-
-    @OneToOne(targetEntity = DoctorEntity.class, fetch = FetchType.LAZY)
-    private long doctorId;
-
-    @ManyToOne(targetEntity = ClinicEntity.class, fetch = FetchType.LAZY)
-    private long clinicId;
-
-    @OneToOne(targetEntity = Characteristic.class, fetch = FetchType.LAZY)
-    private long characteristicId;
-
-}
