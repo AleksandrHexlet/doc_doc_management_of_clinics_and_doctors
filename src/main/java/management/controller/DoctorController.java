@@ -2,16 +2,18 @@ package management.controller;
 
 import management.model.bd.DoctorEntity;
 import management.model.dto.DoctorScheduleResponse;
+import management.model.dto.ReserveTimeResponse;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/doctor")
+@RequestMapping("cad/doctor")
 public class DoctorController {
 
     private DoctorService doctorService;
@@ -55,15 +57,15 @@ public class DoctorController {
     }
 
     @PutMapping("/reserve_time")
-    public boolean reserveTime(@RequestParam LocalDateTime date,
-                               @RequestParam long doctorId, @RequestParam long clinicId) {
+    public ReserveTimeResponse reserveTime(@RequestParam LocalDateTime date,
+                                           @RequestParam long doctorId, @RequestParam long clinicId) {
         return doctorService.reserveTime(date, doctorId, clinicId);
     }
 
     @PutMapping("/cancel_reserve")
     public boolean cancelReserve(@RequestParam LocalDateTime date,
                                @RequestParam long doctorId, @RequestParam long clinicId) {
-        return doctorService.cancelReserve(date, doctorId, clinicId);
+        return doctorService.cancelReserveIfNotConfirm(date, doctorId, clinicId);
     }
     @GetMapping("/authorize")
     public DoctorEntity getDoctorByLoginAndPassword(@RequestParam String login, @RequestParam String password) {
@@ -74,4 +76,10 @@ public class DoctorController {
         return doctorService.getDoctorById(id);
     }
 
+
+    @GetMapping("/doctors")
+    public List<DoctorEntity> getDoctorByCityPageAndSize(@RequestParam String city, @RequestParam int page,
+                                                   @RequestParam int size) {
+        return doctorService.getDoctorByCityPageAndSize(city,page,size);
+    }
 }

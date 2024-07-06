@@ -48,6 +48,9 @@ public class DoctorEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String city;
+
     @Column(name= "is_active", columnDefinition = "boolean default true", insertable = false)
     private boolean isActive;
 

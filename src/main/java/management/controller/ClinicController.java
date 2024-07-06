@@ -2,6 +2,7 @@ package management.controller;
 
 import management.model.bd.ClinicEntity;
 import management.model.dto.ClinicByDoctorIdWithSchedule;
+import management.model.dto.db.CountDoctorFreeScheduleByClinicId;
 import management.service.ClinicService;
 import management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clinic")
+@RequestMapping("cad/clinic")
 public class ClinicController {
 
-   private DoctorService doctorService;
-   private ClinicService clinicService;
+    private DoctorService doctorService;
+    private ClinicService clinicService;
 
-   @Autowired
+    @Autowired
     public ClinicController(DoctorService doctorService, ClinicService clinicService) {
         this.doctorService = doctorService;
         this.clinicService = clinicService;
@@ -29,14 +30,16 @@ public class ClinicController {
 
     @GetMapping()
     public String clinic() {
-      return clinicService.getClinic("qwerty");
+        return clinicService.getClinic("qwerty");
 
     }
+
     @PostMapping()
     public String clinicPost() {
         return clinicService.getClinic("qwerty");
 
     }
+
     @DeleteMapping()
     public String clinicDel() {
 
@@ -46,15 +49,23 @@ public class ClinicController {
 
     @GetMapping("/doctor/{id}")
     public List<ClinicByDoctorIdWithSchedule> getClinicsWithScheduleByDoctorId(
-            @PathVariable(name = "id") long doctorId, LocalDateTime dateTime){
-       return clinicService.getClinicsWithScheduleByDoctorId(doctorId,dateTime);
+            @PathVariable(name = "id") long doctorId, LocalDateTime dateTime) {
+        return clinicService.getClinicsWithScheduleByDoctorId(doctorId, dateTime);
     }
 
-@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ClinicEntity getClinicById(@PathVariable(name = "id") long clinicId) {
-       return clinicService.getClinicById(clinicId);
+        return clinicService.getClinicById(clinicId);
 
-}
+    }
+
+    @GetMapping("/count/schedule/{clinicId}")
+       public List<CountDoctorFreeScheduleByClinicId> getCountDoctorFreeScheduleByClinicId(@PathVariable long clinicId){
+        return clinicService.getCountDoctorFreeScheduleByClinicId(clinicId);
+
+    }
+
+
 
 
 

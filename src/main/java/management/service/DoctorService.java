@@ -3,9 +3,12 @@ package management.service;
 import management.model.bd.DailySchedule;
 import management.model.bd.DoctorEntity;
 import management.model.dto.DoctorScheduleResponse;
+import management.model.dto.ReserveTimeResponse;
 import management.repository.DailyScheduleRepository;
 import management.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,6 +18,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,10 +45,10 @@ public class DoctorService {
         }
         List<Long> doctorIdList = doctorList.stream().map(doctor -> doctor.getDoctorId()).toList();
         List<DailySchedule> dailySchedules = dailyScheduleRepository
-                .findFreeSlotByDateAndDoctorId(doctorIdList,dateAdmission);
+                .findFreeSlotByDateAndDoctorId(doctorIdList, dateAdmission);
 
 
-        Map<Long,List<DailySchedule>> scheduleMap = dailySchedules.stream().collect(Collectors
+        Map<Long, List<DailySchedule>> scheduleMap = dailySchedules.stream().collect(Collectors
                 .groupingBy(dailySchedule -> dailySchedule.getDoctorId()));
 
         List<DoctorScheduleResponse> doctorScheduleResponseList = doctorList.stream().map(
@@ -55,17 +60,17 @@ public class DoctorService {
     }
 
     public Long deleteDoctor(long doctorId) {
-        if(doctorRepository.doctorDelete(doctorId).isEmpty()){
+        if (doctorRepository.doctorDelete(doctorId).isEmpty()) {
             return null;
         }
         return doctorRepository.doctorDelete(doctorId).get();
     }
 
     public DoctorEntity addDoctor(DoctorEntity doctor) {
-        String password = String.valueOf ((Math.random() * (10000 - 100)) + 100);
+        String password = String.valueOf((Math.random() * (10000 - 100)) + 100);
         doctor.setLogin(doctor.getLastName());
         doctor.setPassword(password);
-       return doctorRepository.save(doctor);
+        return doctorRepository.save(doctor);
     }
 
     public List<DoctorEntity> getDoctorsByClinicId(Long id) {
@@ -73,43 +78,60 @@ public class DoctorService {
     }
 
 
-    public boolean isDoctorTimeFree(LocalDateTime date, long doctorId, long clinicId){
+    public boolean isDoctorTimeFree(LocalDateTime date, long doctorId, long clinicId) {
         LocalTime timeFrom = date.toLocalTime();
         LocalDateTime dateWithoutTime = LocalDateTime.of(date.getYear(),
-                date.getMonthValue(),date.getDayOfMonth(),0,0);
-     return doctorRepository.checkFreeTimeDoctor(dateWithoutTime,timeFrom, doctorId,clinicId) > 0;
+                date.getMonthValue(), date.getDayOfMonth(), 0, 0);
+        return doctorRepository.checkFreeTimeDoctor(dateWithoutTime, timeFrom, doctorId, clinicId) > 0;
     }
 
-
-    public boolean reserveTime(LocalDateTime date, long doctorId, long clinicId) {
+    public ReserveTimeResponse reserveTime(LocalDateTime date, long doctorId, long clinicId) {
         LocalTime timeFrom = date.toLocalTime();
         LocalDateTime dateWithoutTime = LocalDateTime.of(date.getYear(),
-                date.getMonthValue(),date.getDayOfMonth(),0,0);
-         if(isDoctorTimeFree(date,doctorId,clinicId))  {
-           return doctorRepository.reserveTime(dateWithoutTime,timeFrom, doctorId,clinicId) > 0;
-         } else {
-           return false;
+                date.getMonthValue(), date.getDayOfMonth(), 0, 0);
+        if (isDoctorTimeFree(date, doctorId, clinicId)) {
+            ReserveTimeResponse reserveTimeResponse = doctorRepository.reserveTime(dateWithoutTime, timeFrom, doctorId, clinicId);
+            bookingСonfirmation(reserveTimeResponse.getId(),date,doctorId,clinicId);
+            return reserveTimeResponse;
         }
-
+        return null;
     }
 
-    public boolean cancelReserve(LocalDateTime date, long doctorId, long clinicId) {
+    public void bookingСonfirmation(long idDailySchedule, LocalDateTime date, long doctorId, long clinicId){
+        if(dailyScheduleRepository.existsByIdAndConfirmTrue(idDailySchedule)){
+            Executors.newScheduledThreadPool(2).schedule(()->{
+                cancelReserveIfNotConfirm(date,doctorId,clinicId);
+            },10, TimeUnit.MINUTES);
+        }
+    }
+
+    public boolean cancelReserveIfNotConfirm(LocalDateTime date, long doctorId, long clinicId) {
         LocalTime timeFrom = date.toLocalTime();
         LocalDateTime dateWithoutTime = LocalDateTime.of(date.getYear(),
-                date.getMonthValue(),date.getDayOfMonth(),0,0);
-        doctorRepository.cancelReserve(dateWithoutTime,timeFrom, doctorId,clinicId);
+                date.getMonthValue(), date.getDayOfMonth(), 0, 0);
+        doctorRepository.cancelReserve(dateWithoutTime, timeFrom, doctorId, clinicId);
         return true;
-    };
+    }
 
 
     public DoctorEntity getDoctorByLoginAndPassword(String login, String password) {
-        DoctorEntity doctor = doctorRepository.getDoctorByLoginAndPassword(login,password);
-        if(doctor == null)  throw new ResponseStatusException(HttpStatus
-                .NOT_FOUND,"Doctor not found");
+        DoctorEntity doctor = doctorRepository.getDoctorByLoginAndPassword(login, password);
+        if (doctor == null) throw new ResponseStatusException(HttpStatus
+                .NOT_FOUND, "Doctor not found");
         return doctor;
     }
 
     public DoctorEntity getDoctorById(long id) {
         return doctorRepository.findById(id).orElse(null);
+    }
+
+
+    public boolean confirmReserveTime(long dailyScheduleId) {
+       return dailyScheduleRepository.confirmReserveTime(dailyScheduleId);
+    }
+
+    public List<DoctorEntity> getDoctorByCityPageAndSize(String city, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return doctorRepository.findByCity(city, pageable).getContent();
     }
 }

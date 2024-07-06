@@ -31,10 +31,12 @@ public class DailySchedule {
     @Column(name ="time_is_free")
     private boolean timeIsFree;
 
+    @Column(name ="confirm",columnDefinition = "boolean default false")
+    private boolean confirm;
+
     @Enumerated(EnumType.STRING)
     @Column(name ="type_day")
     private TypeDay typeDay;
-
 
 
     @ManyToOne(targetEntity = DoctorEntity.class)

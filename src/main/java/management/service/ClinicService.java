@@ -3,6 +3,7 @@ package management.service;
 import management.model.bd.ClinicEntity;
 import management.model.bd.DailySchedule;
 import management.model.dto.ClinicByDoctorIdWithSchedule;
+import management.model.dto.db.CountDoctorFreeScheduleByClinicId;
 import management.repository.ClinicRepository;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +48,11 @@ public class ClinicService {
 
     public ClinicEntity getClinicById(long clinicId){
         return clinicRepository.findById(clinicId).orElse(null);
+    }
+
+    public List<CountDoctorFreeScheduleByClinicId> getCountDoctorFreeScheduleByClinicId(long clinicId) {
+       LocalDateTime timeFrom = LocalDateTime.now();
+       LocalDateTime timeTo = LocalDateTime.now().plusDays(7);
+        return clinicRepository.getCountDoctorFreeScheduleByClinicId(clinicId,timeFrom,timeTo);
     }
 }

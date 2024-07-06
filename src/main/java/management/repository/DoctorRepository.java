@@ -2,6 +2,9 @@ package management.repository;
 
 import jakarta.transaction.Transactional;
 import management.model.bd.DoctorEntity;
+import management.model.dto.ReserveTimeResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,8 +53,10 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity,Long> {
             "daily_schedule.date = :dateWithoutTime AND daily_schedule.time_from = :timeFrom AND " +
             "daily_schedule.time_is_free = true AND daily_schedule.type_day = WORK_DAY " +
             "AND daily_schedule.doctor_id = :doctorId AND " +
-            "daily_schedule.clinic_id = :clinicId")
-    int reserveTime(LocalDateTime dateWithoutTime, LocalTime timeFrom, long doctorId, long clinicId);
+            "daily_schedule.clinic_id = :clinicId " +
+            "returning daily_schedule.time_to," +
+            "daily_schedule.id")
+    ReserveTimeResponse reserveTime(LocalDateTime dateWithoutTime, LocalTime timeFrom, long doctorId, long clinicId);
 
     @Transactional
     @Modifying
@@ -66,6 +71,11 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity,Long> {
             "doctor.password = :password")
     DoctorEntity getDoctorByLoginAndPassword(String login, String password);
 
+    Page<DoctorEntity> findByCity(String city, Pageable pageable);
+
+
+    // отдать количество свободных слотов по каждому доктору
+    // в конкретной клинике на неделю вперед
 
 //    Отдаёт врача по логину и паролю
 //    Проверяет свободное время врача
